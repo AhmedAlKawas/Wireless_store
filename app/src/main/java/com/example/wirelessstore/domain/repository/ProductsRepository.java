@@ -11,6 +11,6 @@ public interface ProductsRepository {
 
     LiveData<List<Product>> getProducts();
 
-    void insertProductsList();
+    void insertProduct(Product product);
 
 }
