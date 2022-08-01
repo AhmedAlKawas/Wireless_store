@@ -1,5 +1,6 @@
 package com.example.wirelessstore.data.data_source;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
@@ -14,7 +15,7 @@ import java.util.List;
 public interface ProductsDao {
 
     @Query("SELECT * from products_table")
-    MutableLiveData<List<Product>> getProducts();
+    LiveData<List<Product>> getProducts();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertProduct(Product product);
