@@ -58,7 +58,7 @@ public class ProductsActivity extends AppCompatActivity {
         productsViewModel = new ViewModelProvider(this, viewModelFactory)
                 .get(ProductsViewModel.class);
         productsViewModel.products().observe(this, productsResponse -> {
-            if (productsResponse != null && !productsResponse.isEmpty()){
+            if (productsResponse != null && !productsResponse.isEmpty() && products.isEmpty()){
                 products.addAll(productsResponse);
                 adapter.notifyDataSetChanged();
             }

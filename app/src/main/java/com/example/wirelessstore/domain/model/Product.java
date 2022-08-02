@@ -70,7 +70,7 @@ public class Product {
         RequestOptions requestOptions = new RequestOptions()
                 .placeholder(R.drawable.ic_baseline_phone_android_24)
                 .error(R.drawable.ic_baseline_phone_android_24)
-                .centerCrop();
+                .fitCenter();
 
         Glide.with(imageView.getContext()).setDefaultRequestOptions(requestOptions)
                 .load(imgUrl)
