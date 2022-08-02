@@ -14,8 +14,6 @@
             android:layout_height="match_parent"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:spanCount="2"
-            tools:layout_editor_absoluteX="-76dp"
-            tools:layout_editor_absoluteY="-285dp"
             tools:listitem="@layout/product_item" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

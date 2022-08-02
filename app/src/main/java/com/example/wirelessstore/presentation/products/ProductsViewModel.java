@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.wirelessstore.domain.model.Product;
 import com.example.wirelessstore.domain.repository.ProductsRepository;
+import com.example.wirelessstore.use_cases.GetProducts;
 
 import java.util.List;
 
@@ -16,11 +17,11 @@ import io.reactivex.disposables.Disposable;
 
 public class ProductsViewModel extends ViewModel {
 
-    private final ProductsRepository repository;
+    private final GetProducts getProductsUseCase;
 
     @Inject
-    public ProductsViewModel(ProductsRepository repository) {
-        this.repository = repository;
+    public ProductsViewModel(GetProducts getProductsUseCase) {
+        this.getProductsUseCase = getProductsUseCase;
     }
 
     private final MutableLiveData<List<Product>> _products = new MutableLiveData<>();
@@ -30,7 +31,7 @@ public class ProductsViewModel extends ViewModel {
     }
 
     void getProducts() {
-        repository.getProducts().subscribe(
+        getProductsUseCase.getProducts().subscribe(
                 new Observer<List<Product>>() {
                     @Override
                     public void onSubscribe(Disposable d) {

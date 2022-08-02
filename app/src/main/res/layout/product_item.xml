@@ -30,7 +30,8 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                app:cardBackgroundColor="@android:color/transparent">
 
                 <View
                     android:id="@+id/view_guideline"
@@ -58,7 +59,6 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     android:contentDescription="@string/add_to_cart"
                     applyCartBtnDrawable="@{product.productIsAddedToCart}"
-                    android:src="@drawable/ic_baseline_add_shopping_cart_24"
                     android:layout_marginEnd="8dp"
                     app:tint="@color/design_default_color_primary" />
 

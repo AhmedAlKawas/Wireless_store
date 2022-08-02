@@ -22,7 +22,7 @@ public class GetProducts {
         this.repository = repository;
     }
 
-    Observable<List<Product>> getProducts() {
+    public Observable<List<Product>> getProducts() {
 
         return Observable.create(emitter ->
                 repository.getProducts().observeOn(Schedulers.io())
@@ -38,7 +38,10 @@ public class GetProducts {
 
                                         try {
                                             if (!products.isEmpty()) {
-                                                emitter.onNext(products);
+                                                if (products.size() ==
+                                                        ProductsList.getProductsList().size()) {
+                                                    emitter.onNext(products);
+                                                }
                                             } else {
                                                 createDummyData();
                                             }
