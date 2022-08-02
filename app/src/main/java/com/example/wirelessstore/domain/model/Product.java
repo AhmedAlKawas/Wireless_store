@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "products_table")
 public class Product {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "product_id")
     private int id;
 
@@ -18,7 +18,13 @@ public class Product {
     private String productImageUrl;
 
     @ColumnInfo(name = "product_is_added_to_cart")
-    private String productIsAddedToCart;
+    private boolean productIsAddedToCart;
+
+    public Product(String productName, String productImageUrl, boolean productIsAddedToCart) {
+        this.productName = productName;
+        this.productImageUrl = productImageUrl;
+        this.productIsAddedToCart = productIsAddedToCart;
+    }
 
     public int getId() {
         return id;
@@ -44,11 +50,11 @@ public class Product {
         this.productImageUrl = productImageUrl;
     }
 
-    public String getProductIsAddedToCart() {
+    public boolean getProductIsAddedToCart() {
         return productIsAddedToCart;
     }
 
-    public void setProductIsAddedToCart(String productIsAddedToCart) {
+    public void setProductIsAddedToCart(boolean productIsAddedToCart) {
         this.productIsAddedToCart = productIsAddedToCart;
     }
 }

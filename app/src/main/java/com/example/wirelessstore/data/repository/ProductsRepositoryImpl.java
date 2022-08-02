@@ -10,6 +10,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
+
 public class ProductsRepositoryImpl implements ProductsRepository {
 
     ProductsDao productsDao;
@@ -20,7 +22,7 @@ public class ProductsRepositoryImpl implements ProductsRepository {
     }
 
     @Override
-    public LiveData<List<Product>> getProducts() {
+    public Observable<List<Product>> getProducts() {
         return productsDao.getProducts();
     }
 
