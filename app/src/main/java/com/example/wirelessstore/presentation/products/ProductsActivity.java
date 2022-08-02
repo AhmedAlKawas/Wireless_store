@@ -1,14 +1,15 @@
-package com.example.wirelessstore;
+package com.example.wirelessstore.presentation.products;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
+import com.example.wirelessstore.R;
 import com.example.wirelessstore.di.AppModule;
 import com.example.wirelessstore.di.DaggerAppComponent;
 import com.example.wirelessstore.di.RoomModule;
 
-public class MainActivity extends AppCompatActivity {
+public class ProductsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
