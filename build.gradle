@@ -7,6 +7,9 @@ plugins {
 ext{
     room_version = "2.4.3"
     dagger_version = "2.43.1"
+    compose_version = "2.0.0"
+    rx_version = "2.1.0"
+    glide_version = "4.13.2"
 }
 
 task clean(type: Delete) {

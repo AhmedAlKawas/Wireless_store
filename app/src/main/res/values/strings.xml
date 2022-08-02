@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Wireless store</string>
+    <string name="product_image">Product image</string>
+    <string name="add_to_cart">add to cart</string>
 </resources>

@@ -25,6 +25,9 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    buildFeatures {
+        dataBinding true
+    }
 }
 
 dependencies {
@@ -46,6 +49,13 @@ dependencies {
     annotationProcessor  "com.google.dagger:dagger-compiler:$rootProject.dagger_version"
 
     //RxJava
-    implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
+    implementation "io.reactivex.rxjava2:rxandroid:$rootProject.rx_version"
+
+    //Compose
+    implementation "androidx.compose.material:material-icons-extended:$rootProject.compose_version"
+
+    //Glide
+    implementation "com.github.bumptech.glide:glide:$rootProject.glide_version"
+    annotationProcessor "com.github.bumptech.glide:compiler:$rootProject.glide_version"
 
 }

@@ -1,8 +1,15 @@
 package com.example.wirelessstore.domain.model;
 
+import android.widget.ImageView;
+
+import androidx.databinding.BindingAdapter;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.example.wirelessstore.R;
 
 @Entity(tableName = "products_table")
 public class Product {
@@ -57,4 +64,24 @@ public class Product {
     public void setProductIsAddedToCart(boolean productIsAddedToCart) {
         this.productIsAddedToCart = productIsAddedToCart;
     }
+
+    @BindingAdapter("loadImage")
+    public static void loadImageByGlide(ImageView imageView, String imgUrl) {
+        RequestOptions requestOptions = new RequestOptions()
+                .placeholder(R.drawable.ic_baseline_phone_android_24)
+                .error(R.drawable.ic_baseline_phone_android_24)
+                .centerCrop();
+
+        Glide.with(imageView.getContext()).setDefaultRequestOptions(requestOptions)
+                .load(imgUrl)
+                .into(imageView);
+    }
+
+    @BindingAdapter("applyCartBtnDrawable")
+    public static void loadImageByGlide(ImageView imageView, boolean isProductAddedToCart) {
+        imageView.setImageResource(isProductAddedToCart ?
+                R.drawable.ic_baseline_shopping_cart_24 :
+                R.drawable.ic_baseline_add_shopping_cart_24);
+    }
+
 }
