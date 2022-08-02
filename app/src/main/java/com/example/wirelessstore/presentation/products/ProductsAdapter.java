@@ -1,6 +1,5 @@
 package com.example.wirelessstore.presentation.products;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -18,9 +17,11 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.Produc
 
     private final List<Product> products;
     private LayoutInflater layoutInflater;
+    private final OnProductItemListener listener;
 
-    ProductsAdapter(List<Product> products) {
+    ProductsAdapter(List<Product> products, OnProductItemListener listener) {
         this.products = products;
+        this.listener = listener;
     }
 
     @NonNull
@@ -36,6 +37,8 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.Produc
     @Override
     public void onBindViewHolder(@NonNull ProductHolder holder, int position) {
         holder.productItemBinding.setProduct(products.get(position));
+        holder.productItemBinding.addToCartBtn.setOnClickListener(view ->
+                listener.onItemAddToCartClicked(position));
 
     }
 

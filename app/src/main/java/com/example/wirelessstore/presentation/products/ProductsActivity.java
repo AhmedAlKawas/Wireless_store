@@ -20,7 +20,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-public class ProductsActivity extends AppCompatActivity {
+public class ProductsActivity extends AppCompatActivity implements OnProductItemListener {
 
     @Inject
     ViewModelFactory viewModelFactory;
@@ -28,6 +28,7 @@ public class ProductsActivity extends AppCompatActivity {
     List<Product> products;
     ProductsAdapter adapter;
     ActivityMainBinding binding;
+    int interactionProductPosition = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +49,7 @@ public class ProductsActivity extends AppCompatActivity {
 
     private void initProductsAdapter() {
         products = new ArrayList<>();
-        adapter = new ProductsAdapter(products);
+        adapter = new ProductsAdapter(products, this);
         binding.productsRv.setAdapter(adapter);
     }
 
@@ -58,12 +59,26 @@ public class ProductsActivity extends AppCompatActivity {
         productsViewModel = new ViewModelProvider(this, viewModelFactory)
                 .get(ProductsViewModel.class);
         productsViewModel.products().observe(this, productsResponse -> {
-            if (productsResponse != null && !productsResponse.isEmpty() && products.isEmpty()){
+            if (productsResponse != null && !productsResponse.isEmpty() && products.isEmpty()) {
                 products.addAll(productsResponse);
                 adapter.notifyDataSetChanged();
             }
         });
+        productsViewModel.getChangeProductIsAddedToCartResponse().observe(this, success -> {
+            if (success && interactionProductPosition != -1) {
+                products.get(interactionProductPosition)
+                        .setProductIsAddedToCart(products.get(interactionProductPosition)
+                                .getProductIsAddedToCart());
+                adapter.notifyItemChanged(interactionProductPosition);
+                interactionProductPosition = -1;
+            }
+        });
 
+    }
 
+    @Override
+    public void onItemAddToCartClicked(int position) {
+        productsViewModel.changeProductIsAddedToCart(products.get(position));
+        interactionProductPosition = position;
     }
 }

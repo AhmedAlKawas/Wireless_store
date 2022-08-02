@@ -1,5 +1,7 @@
 package com.example.wirelessstore.data.repository;
 
+import android.os.AsyncTask;
+
 import androidx.lifecycle.LiveData;
 
 import com.example.wirelessstore.data.data_source.ProductsDao;
@@ -28,6 +30,22 @@ public class ProductsRepositoryImpl implements ProductsRepository {
 
     @Override
     public void insertProduct(Product product) {
-        productsDao.insertProduct(product);
+        new ProductsRepositoryImpl.insertAsyncTask(productsDao).execute(product);
     }
+
+    private static class insertAsyncTask extends AsyncTask<Product, Void, Void> {
+
+        ProductsDao asyncDao;
+
+        insertAsyncTask(ProductsDao dao) {
+            asyncDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(Product... products) {
+            asyncDao.insertProduct(products[0]);
+            return null;
+        }
+    }
+
 }
