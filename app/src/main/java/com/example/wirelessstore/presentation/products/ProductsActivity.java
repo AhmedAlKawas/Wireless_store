@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -50,10 +51,12 @@ public class ProductsActivity extends AppCompatActivity implements OnProductItem
         initListeners();
         initProductsAdapter();
         productsViewModel.getProducts();
+        productsViewModel.getCartItems();
     }
 
     private void initProductsAdapter() {
-        products = new ArrayList<>();
+        if (products == null)
+            products = new ArrayList<>();
         adapter = new ProductsAdapter(products, this);
         binding.productsRv.setAdapter(adapter);
     }
@@ -74,8 +77,16 @@ public class ProductsActivity extends AppCompatActivity implements OnProductItem
                         .setProductIsAddedToCart(products.get(interactionProductPosition)
                                 .getProductIsAddedToCart());
                 adapter.notifyItemChanged(interactionProductPosition);
+                if (!products.get(interactionProductPosition).getProductIsAddedToCart()) {
+                    Toast.makeText(this, "Added successfully", Toast.LENGTH_SHORT)
+                            .show();
+                } else
+                    Toast.makeText(this, "Removed successfully", Toast.LENGTH_SHORT)
+                            .show();
                 interactionProductPosition = -1;
-            }
+            } else
+                Toast.makeText(this, "An error occurred, try again!",
+                        Toast.LENGTH_SHORT).show();
         });
 
     }
