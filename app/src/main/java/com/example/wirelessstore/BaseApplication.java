@@ -1,11 +1,6 @@
 package com.example.wirelessstore;
 
-import android.app.Activity;
 import android.app.Application;
-
-import com.example.wirelessstore.di.AppComponent;
-import com.example.wirelessstore.di.DaggerAppComponent;
-
 
 import javax.inject.Inject;
 

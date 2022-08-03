@@ -1,6 +1,5 @@
 package com.example.wirelessstore.presentation.products;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +13,7 @@ import com.example.wirelessstore.di.DaggerAppComponent;
 import com.example.wirelessstore.di.RoomModule;
 import com.example.wirelessstore.di.ViewModelFactory;
 import com.example.wirelessstore.domain.model.Product;
+import com.example.wirelessstore.domain.model.ProductsList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +53,6 @@ public class ProductsActivity extends AppCompatActivity implements OnProductItem
         binding.productsRv.setAdapter(adapter);
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     private void initListeners() {
 
         productsViewModel = new ViewModelProvider(this, viewModelFactory)
@@ -61,7 +60,7 @@ public class ProductsActivity extends AppCompatActivity implements OnProductItem
         productsViewModel.products().observe(this, productsResponse -> {
             if (productsResponse != null && !productsResponse.isEmpty() && products.isEmpty()) {
                 products.addAll(productsResponse);
-                adapter.notifyDataSetChanged();
+                adapter.notifyItemRangeInserted(0, ProductsList.getProductsList().size());
             }
         });
         productsViewModel.getChangeProductIsAddedToCartResponse().observe(this, success -> {
