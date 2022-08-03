@@ -1,7 +1,9 @@
 package com.example.wirelessstore.di;
 
 import android.app.Application;
+import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.room.Room;
 
 import com.example.wirelessstore.data.data_source.AppDatabase;
@@ -16,6 +18,7 @@ import com.example.wirelessstore.use_cases.GetProducts;
 import com.example.wirelessstore.use_cases.InsertCartItem;
 import com.example.wirelessstore.use_cases.RemoveCartItem;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -24,20 +27,23 @@ import dagger.Provides;
 @Module
 public class RoomModule {
 
-    private final AppDatabase database;
+    Application application;
 
-    public RoomModule(Application mApplication) {
-        database = Room.databaseBuilder(
-                mApplication,
-                AppDatabase.class,
-                "app_database"
-        ).build();
+    public RoomModule(@NonNull Application application) {
+        this.application = application;
     }
 
     @Singleton
     @Provides
     AppDatabase providesRoomDatabase() {
-        return database;
+        Log.e(
+                "bbbb", "ay &aga"
+        );
+        return Room.databaseBuilder(
+                application,
+                AppDatabase.class,
+                "app_database"
+        ).build();
     }
 
     @Singleton
