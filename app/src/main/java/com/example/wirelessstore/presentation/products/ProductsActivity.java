@@ -1,7 +1,11 @@
 package com.example.wirelessstore.presentation.products;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
@@ -14,6 +18,7 @@ import com.example.wirelessstore.di.RoomModule;
 import com.example.wirelessstore.di.ViewModelFactory;
 import com.example.wirelessstore.domain.model.Product;
 import com.example.wirelessstore.domain.model.ProductsList;
+import com.example.wirelessstore.presentation.cart.CartActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,5 +84,21 @@ public class ProductsActivity extends AppCompatActivity implements OnProductItem
     public void onItemAddToCartClicked(int position) {
         productsViewModel.changeProductIsAddedToCart(products.get(position));
         interactionProductPosition = position;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(@NonNull Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_home, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_shipping_cart) {
+            startActivity(new Intent(ProductsActivity.this, CartActivity.class));
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

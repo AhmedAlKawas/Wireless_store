@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.wirelessstore">
 
-
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".BaseApplication"
@@ -18,8 +17,11 @@
         android:theme="@style/Theme.WirelessStore"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-
-        <activity android:name=".presentation.products.ProductsActivity"
+        <activity
+            android:name=".presentation.cart.CartActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.products.ProductsActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,7 +29,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
     </application>
 
 </manifest>
