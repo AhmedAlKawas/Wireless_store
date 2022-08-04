@@ -33,7 +33,7 @@ public class CartRepositoryImpl implements CartsRepository {
 
     @Override
     public void removeItem(CartItem cartItem) {
-        cartDao.removeItem(cartItem);
+        new CartRepositoryImpl.deleteAsyncTask(cartDao).execute(cartItem);
     }
 
     private static class insertAsyncTask extends AsyncTask<CartItem, Void, Void> {
@@ -47,6 +47,22 @@ public class CartRepositoryImpl implements CartsRepository {
         @Override
         protected Void doInBackground(CartItem... cartItems) {
             asyncDao.insertItem(cartItems[0]);
+            return null;
+        }
+    }
+
+    private static class deleteAsyncTask extends AsyncTask<CartItem, Void, Void> {
+
+        CartDao asyncDao;
+
+        deleteAsyncTask(CartDao dao) {
+            asyncDao = dao;
+        }
+
+
+        @Override
+        protected Void doInBackground(CartItem... cartItems) {
+            asyncDao.removeItem(cartItems[0]);
             return null;
         }
     }

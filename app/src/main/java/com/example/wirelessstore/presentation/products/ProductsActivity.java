@@ -63,11 +63,18 @@ public class ProductsActivity extends BaseActivity implements OnProductItemListe
         });
         productsViewModel.getChangeProductIsAddedToCartResponse().observe(this, success -> {
             if (success && interactionProductPosition != -1) {
+                productsViewModel.addOrRemoveItemFromCart(products.get(interactionProductPosition));
+            } else
+                Toast.makeText(this, "An error occurred, try again!",
+                        Toast.LENGTH_SHORT).show();
+        });
+        productsViewModel.getAddOrRemoveItemFromCartResponse().observe(this, success -> {
+            if (success && interactionProductPosition != -1) {
                 products.get(interactionProductPosition)
                         .setProductIsAddedToCart(products.get(interactionProductPosition)
                                 .getProductIsAddedToCart());
                 adapter.notifyItemChanged(interactionProductPosition);
-                if (!products.get(interactionProductPosition).getProductIsAddedToCart()) {
+                if (products.get(interactionProductPosition).getProductIsAddedToCart()) {
                     Toast.makeText(this, "Added successfully", Toast.LENGTH_SHORT)
                             .show();
                 } else

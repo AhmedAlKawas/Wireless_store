@@ -32,6 +32,12 @@ public class CartsViewModel extends ViewModel {
         return _removeCartItemResponse;
     }
 
+    private final MutableLiveData<Boolean> _changeProductAddedToCartResponse = new MutableLiveData<>();
+
+    MutableLiveData<Boolean> getChangeProductAddedToCartResponse() {
+        return _changeProductAddedToCartResponse;
+    }
+
     @Inject
     public CartsViewModel(ChangeProductIsAddedToCart changeProductIsAddedToCartUseCase,
                           CartUseCases cartUseCases) {
@@ -82,6 +88,34 @@ public class CartsViewModel extends ViewModel {
                     @Override
                     public void onError(Throwable e) {
                         _removeCartItemResponse.postValue(false);
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                }
+        );
+
+    }
+
+    void changeProductAddedToCart(CartItem item){
+
+        changeProductIsAddedToCartUseCase.changeProductIsAddedToCart(item.getProduct()).subscribe(
+                new Observer<Boolean>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(Boolean status) {
+                        _changeProductAddedToCartResponse.postValue(status);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        _changeProductAddedToCartResponse.postValue(false);
                     }
 
                     @Override

@@ -24,7 +24,7 @@ public class ProductsViewModel extends ViewModel {
     private final ChangeProductIsAddedToCart changeProductIsAddedToCartUseCase;
     private final CartUseCases cartUseCases;
     private List<CartItem> carts;
-    CartItem desiredRemoveCartItem;
+    CartItem cartItem;
 
     @Inject
     public ProductsViewModel(GetProducts getProductsUseCase,
@@ -45,6 +45,12 @@ public class ProductsViewModel extends ViewModel {
 
     MutableLiveData<Boolean> getChangeProductIsAddedToCartResponse() {
         return _changeProductIsAddedToCart;
+    }
+
+    private final MutableLiveData<Boolean> _addOrRemoveItemFromCartResponse = new MutableLiveData<>();
+
+    MutableLiveData<Boolean> getAddOrRemoveItemFromCartResponse() {
+        return _addOrRemoveItemFromCartResponse;
     }
 
     void getProducts() {
@@ -83,16 +89,7 @@ public class ProductsViewModel extends ViewModel {
 
                     @Override
                     public void onNext(Boolean success) {
-
-                        if (success){
-                            product.setProductIsAddedToCart(!product.getProductIsAddedToCart());
-                            if (product.getProductIsAddedToCart())
-                                removeCartItem(product);
-                            else
-                                addCartItem(product);
-                        }else
-                            _changeProductIsAddedToCart.postValue(false);
-
+                        _changeProductIsAddedToCart.postValue(success);
                     }
 
                     @Override
@@ -108,36 +105,46 @@ public class ProductsViewModel extends ViewModel {
         );
     }
 
+    void addOrRemoveItemFromCart(Product product) {
+        if (!product.getProductIsAddedToCart())
+            removeCartItem(product);
+        else
+            addCartItem(product);
+    }
+
     private void addCartItem(Product product) {
-        cartUseCases.getInsertCartItem().insertItem(new CartItem(
-                product, System.currentTimeMillis()
-        )).subscribe(new Observer<Boolean>() {
-            @Override
-            public void onSubscribe(Disposable d) {
 
-            }
+        cartItem = new CartItem(product, System.currentTimeMillis());
+        cartUseCases.getInsertCartItem().insertItem(cartItem)
+                .subscribe(new Observer<Boolean>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
 
-            @Override
-            public void onNext(Boolean success) {
-                if (success) {
-                    carts.add(desiredRemoveCartItem);
-                    _changeProductIsAddedToCart.postValue(true);
-                }else
-                    _changeProductIsAddedToCart.postValue(false);
-                desiredRemoveCartItem = null;
+                    }
 
-            }
+                    @Override
+                    public void onNext(Boolean success) {
+                        if (success) {
+                            if (carts == null)
+                                carts = new ArrayList<>();
+                            carts.add(cartItem);
+                            cartItem = null;
+                            _addOrRemoveItemFromCartResponse.postValue(true);
+                        } else
+                            _addOrRemoveItemFromCartResponse.postValue(false);
 
-            @Override
-            public void onError(Throwable e) {
-                _changeProductIsAddedToCart.postValue(false);
-            }
+                    }
 
-            @Override
-            public void onComplete() {
+                    @Override
+                    public void onError(Throwable e) {
+                        _addOrRemoveItemFromCartResponse.postValue(false);
+                    }
 
-            }
-        });
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
     private void removeCartItem(Product product) {
@@ -147,15 +154,15 @@ public class ProductsViewModel extends ViewModel {
             for (CartItem item : carts) {
 
                 if (item.getProduct().getId() == product.getId()) {
-                    desiredRemoveCartItem = item;
+                    cartItem = item;
                     break;
                 }
 
             }
 
-            if (desiredRemoveCartItem != null) {
+            if (cartItem != null) {
 
-                cartUseCases.getRemoveCartItem().removeItem(desiredRemoveCartItem).subscribe(
+                cartUseCases.getRemoveCartItem().removeItem(cartItem).subscribe(
                         new Observer<Boolean>() {
                             @Override
                             public void onSubscribe(Disposable d) {
@@ -165,14 +172,14 @@ public class ProductsViewModel extends ViewModel {
                             @Override
                             public void onNext(Boolean success) {
                                 if (success)
-                                    carts.remove(desiredRemoveCartItem);
-                                desiredRemoveCartItem = null;
-                                _changeProductIsAddedToCart.postValue(success);
+                                    carts.remove(cartItem);
+                                cartItem = null;
+                                _addOrRemoveItemFromCartResponse.postValue(success);
                             }
 
                             @Override
                             public void onError(Throwable e) {
-                                _changeProductIsAddedToCart.postValue(false);
+                                _addOrRemoveItemFromCartResponse.postValue(false);
                             }
 
                             @Override
@@ -183,7 +190,7 @@ public class ProductsViewModel extends ViewModel {
                 );
 
             } else
-                _changeProductIsAddedToCart.postValue(false);
+                _addOrRemoveItemFromCartResponse.postValue(false);
 
         }
 

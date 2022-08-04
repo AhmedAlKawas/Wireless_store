@@ -1,8 +1,9 @@
 package com.example.wirelessstore.presentation.cart;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -12,6 +13,7 @@ import com.example.wirelessstore.di.BaseActivity;
 import com.example.wirelessstore.di.ViewModelFactory;
 import com.example.wirelessstore.domain.model.CartItem;
 import com.example.wirelessstore.presentation.products.OnProductItemListener;
+import com.example.wirelessstore.presentation.products.ProductsActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +28,7 @@ public class CartActivity extends BaseActivity implements OnProductItemListener 
     List<CartItem> cartItems;
     CartsAdapter adapter;
     ActivityMainBinding binding;
+    int deleteItemPosition = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +50,18 @@ public class CartActivity extends BaseActivity implements OnProductItemListener 
                 adapter.notifyItemRangeInserted(0, cartsResponse.size());
             }
         });
+        cartsViewModel.getRemoveCartItemResponse().observe(this, success -> {
+            if (success)
+                cartsViewModel.changeProductAddedToCart(cartItems.get(deleteItemPosition));
+        });
+        cartsViewModel.getChangeProductAddedToCartResponse().observe(this, success -> {
+            if (success && deleteItemPosition != -1){
+                cartItems.remove(deleteItemPosition);
+                adapter.notifyItemRemoved(deleteItemPosition);
+                Toast.makeText(this, "Removed successfully", Toast.LENGTH_SHORT).show();
+                deleteItemPosition = -1;
+            }
+        });
     }
 
     private void initCartsAdapter() {
@@ -60,6 +75,12 @@ public class CartActivity extends BaseActivity implements OnProductItemListener 
     public void onItemAddToCartClicked(int position) {
 
         cartsViewModel.removeCartItem(cartItems.get(position));
+        deleteItemPosition = position;
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(CartActivity.this, ProductsActivity.class));
     }
 }
